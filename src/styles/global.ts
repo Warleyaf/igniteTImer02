@@ -1,4 +1,4 @@
-// dessa forma aqui eu crio meus styles global
+
 import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
@@ -8,10 +8,23 @@ export const GlobalStyle = createGlobalStyle`
       box-sizing: border-box;
    }
 
+   :focus {
+      outline: 0;
+      box-shadow: 0 0 0 2px ${props => props.theme['green-500']};
+   }
+
    body {
-      background: #333;
-      color: #fff;
+      background: ${props => props.theme["gray-900"]};
+      color: ${props => props.theme["gray-300"]};
+   }
+
+   border-style, input-security, textarea, button {
+      font-family: 'Roboto', sans-serif;
+      font-weight: 400;
+      font-size: 1rem;
    }
 `
 
-// após definir os temas globais eu posso importar ele em qualquer parte dos meus arquivos, no caso eu vou importar dentro do App.tsx, e lembre-se.... para funcionar eu preciso importar dentro do <ThemeProvider>
+//aqui estou definindo a fonte padrão e as cores padrão do sistema.
+
+// ali dentro de body, eu defini o background utilizando as props que vai pegar as cores lá de dentro do meu default.ts na função defaultTheme.

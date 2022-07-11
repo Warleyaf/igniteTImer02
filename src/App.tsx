@@ -19,4 +19,3 @@ export function App() {
   )
 }
 
-// importei dentro do meu themeprovider, lembre-se disso!!!
