@@ -1,5 +1,6 @@
 import { Play } from 'phosphor-react'
-import { useState } from 'react'
+import { useForm } from 'react-hook-form' // aqui importei a função useForm
+
 import {
   CountdownContainer,
   FormContainer,
@@ -10,24 +11,31 @@ import {
   TaskInput,
 } from './styles'
 
-// temos duas formas de trabalhar com formulários no react, com o controlled / uncontrolled
-// uncontrolled é a gente busca a informação do input somente quando nós precisarmos dela
-
 export function Home() {
-  const [task, setTask] = useState('')
+  // esse register nada mais é que um método, que ele vai adicionar um input ao nosso formulário, e quando eu dou esse useForm() é como se eu tivesse criando um novo formulário e afunçlão register fala quais são os campos que eu vou ter no meu formulário.
+
+  const { register, handleSubmit, watch } = useForm()
+  // esse watch meio que eu fico observando alguma coisa
+
+  function handleCreateNewCycle(data: any) {
+    // esse data são tipos os dados dos inputs do nosso formulário
+    console.log(data)
+  }
+
+  const task = watch('task') // aqui meio que estou falando que eu quero observar o campo task que está ai no primeiro form, e dessa forma ai eu consigo saber o falor de task em tempo real
+  const isSubmitDisabled = !task // aqui meio que é uma variável auxiliar que é para facilitar a leitura do código para quem for ver esse código, isso é meio que uma boa prática e para ajudar o próximo na legibilidade do código
 
   return (
     <HomeContainer>
-      <form action="">
+      {/* aqui no onSubmit meio que estou passando o handleSubmit que está vindo do mpetodo do useForm e passo para dentro do handleSubmit a função do handleCreateNewCicle */}
+      <form onSubmit={handleSubmit(handleCreateNewCycle)} action="">
         <FormContainer>
           <label htmlFor="task">Vou trabalhar em</label>
           <TaskInput
             id="task"
             list="task-suggestions"
             placeholder="Dê um nome para o seu projeto"
-            // isso ai de baixo o onChange e o value meio que são os controlled components que é eu ficar monitorando a cada digitação e salvar no estado a informação
-            onChange={(e) => setTask(e.target.value)}
-            value={task}
+            {...register('task')} // sintaxe do register
           />
 
           <datalist id="task-suggestions">
@@ -45,6 +53,7 @@ export function Home() {
             step={5} // esse step significa que, toda vez que aumentar meu número vai aumentar de 5 em 5
             min={5}
             max={60}
+            {...register('minutesAmount', { valueAsNumber: true })} // sintaxe do register
           />
 
           <span>minutos.</span>
@@ -57,10 +66,8 @@ export function Home() {
           <span>0</span>
           <span>0</span>
         </CountdownContainer>
-
-        <StartCountdownButton disabled={!task} type="submit">
-          {' '}
-          {/* esse !task meio que vai liberar o meu botão de começar do meu pomodoro quando eu digitar alguma tarefa lá no meu input */}
+        {/** aqui estou observando a task que esta lá em cima na linha 25, e meio que estou dizendo  se o campo de task for diferente de vazio eu quero habilitar o botão, no caso quando alguém digitar algo no meu task eu habilito o botão */}
+        <StartCountdownButton disabled={isSubmitDisabled} type="submit">
           <Play size={24} />
           Começar
         </StartCountdownButton>
