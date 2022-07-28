@@ -1,4 +1,5 @@
 import { Play } from 'phosphor-react'
+import { useState } from 'react'
 import {
   CountdownContainer,
   FormContainer,
@@ -9,7 +10,12 @@ import {
   TaskInput,
 } from './styles'
 
+// temos duas formas de trabalhar com formulários no react, com o controlled / uncontrolled
+// uncontrolled é a gente busca a informação do input somente quando nós precisarmos dela
+
 export function Home() {
+  const [task, setTask] = useState('')
+
   return (
     <HomeContainer>
       <form action="">
@@ -19,6 +25,9 @@ export function Home() {
             id="task"
             list="task-suggestions"
             placeholder="Dê um nome para o seu projeto"
+            // isso ai de baixo o onChange e o value meio que são os controlled components que é eu ficar monitorando a cada digitação e salvar no estado a informação
+            onChange={(e) => setTask(e.target.value)}
+            value={task}
           />
 
           <datalist id="task-suggestions">
@@ -49,7 +58,9 @@ export function Home() {
           <span>0</span>
         </CountdownContainer>
 
-        <StartCountdownButton disabled type="submit">
+        <StartCountdownButton disabled={!task} type="submit">
+          {' '}
+          {/* esse !task meio que vai liberar o meu botão de começar do meu pomodoro quando eu digitar alguma tarefa lá no meu input */}
           <Play size={24} />
           Começar
         </StartCountdownButton>
